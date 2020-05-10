@@ -1,5 +1,5 @@
 # Paging
-Android Jetpack Paging封装
+Android Jetpack Paging封装[![Download](https://api.bintray.com/packages/viz/VCommon/paging/images/download.svg)](https://bintray.com/viz/VCommon/paging/_latestVersion)
 
 ## 使用方法
 参照demo中MainFragment类
