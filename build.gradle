@@ -7,7 +7,7 @@
 
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:4.1.0-alpha08'
+            classpath 'com.android.tools.build:gradle:4.1.0-alpha09'
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
             // NOTE: Do not place your application dependencies here; they belong
@@ -21,6 +21,12 @@
             google()
             jcenter()
 
+        }
+        tasks.withType(Javadoc) {
+            options{ encoding "UTF-8"
+                charSet 'UTF-8'
+                links "http://docs.oracle.com/javase/7/docs/api"
+            }
         }
     }
 

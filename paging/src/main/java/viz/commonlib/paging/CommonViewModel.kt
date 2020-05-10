@@ -75,45 +75,46 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
                 keyMethodName: String? = null,
                 savedState: Boolean = false,
+                pageSize: Int = 10,
                 key: String
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragment.requireContext())
-                .getCommonNewRepository(
-                    type,
-                    { query, limit ->
-                        initCallback.invoke(query, limit)
-                    },
-                    { query, after, limit ->
-                        afterCallback.invoke(query, after, limit)
-                    },
-                    formatItems,
-                    subredditName,
-                    insertResultIntoDb,
-                    query,
-                    networkPageSize,
-                    afterMethodName,
-                    dataSourceFactory,
-                    keyMethodName
-                )
+                    .getCommonNewRepository(
+                            type,
+                            { query, limit ->
+                                initCallback.invoke(query, limit)
+                            },
+                            { query, after, limit ->
+                                afterCallback.invoke(query, after, limit)
+                            },
+                            formatItems,
+                            subredditName,
+                            insertResultIntoDb,
+                            query,
+                            networkPageSize,
+                            afterMethodName,
+                            dataSourceFactory,
+                            keyMethodName
+                    )
             return ViewModelProvider(
-                fragment,
-                if (savedState) {
-                    object : AbstractSavedStateViewModelFactory(fragment, null) {
-                        override fun <T : ViewModel?> create(
-                            key: String,
-                            modelClass: Class<T>,
-                            handle: SavedStateHandle
-                        ): T {
-                            return CommonViewModel<T, E, Q>(repo, handle = handle) as T
+                    fragment,
+                    if (savedState) {
+                        object : AbstractSavedStateViewModelFactory(fragment, null) {
+                            override fun <T : ViewModel?> create(
+                                    key: String,
+                                    modelClass: Class<T>,
+                                    handle: SavedStateHandle
+                            ): T {
+                                return CommonViewModel<T, E, Q>(repo, handle = handle) as T
+                            }
                         }
-                    }
-                } else {
-                    object : ViewModelProvider.Factory {
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return CommonViewModel<T, E, Q>(repo) as T
+                    } else {
+                        object : ViewModelProvider.Factory {
+                            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize) as T
+                            }
                         }
-                    }
-                })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
+                    })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
         }
 
         fun <T, F, E : Parcelable, Q : Parcelable> getViewModel(
@@ -131,43 +132,44 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
                 keyMethodName: String? = null,
                 savedState: Boolean = false,
+                pageSize: Int = 10,
                 key: String
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragment.requireContext())
-                .getCommonNewRepository(
-                    type,
-                    { query, limit ->
-                        initCallback.invoke(f, query, limit)
-                    }, { query, after, limit ->
+                    .getCommonNewRepository(
+                            type,
+                            { query, limit ->
+                                initCallback.invoke(f, query, limit)
+                            }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
                     },
-                    formatItems,
-                    subredditName,
-                    insertResultIntoDb,
-                    query,
-                    networkPageSize,
-                    afterMethodName,
-                    dataSourceFactory,
-                    keyMethodName
-                )
+                            formatItems,
+                            subredditName,
+                            insertResultIntoDb,
+                            query,
+                            networkPageSize,
+                            afterMethodName,
+                            dataSourceFactory,
+                            keyMethodName
+                    )
             return ViewModelProvider(fragment,
-                if (savedState) {
-                    object : AbstractSavedStateViewModelFactory(fragment, null) {
-                        override fun <T : ViewModel?> create(
-                            key: String,
-                            modelClass: Class<T>,
-                            handle: SavedStateHandle
-                        ): T {
-                            return CommonViewModel<T, E, Q>(repo, handle = handle) as T
+                    if (savedState) {
+                        object : AbstractSavedStateViewModelFactory(fragment, null) {
+                            override fun <T : ViewModel?> create(
+                                    key: String,
+                                    modelClass: Class<T>,
+                                    handle: SavedStateHandle
+                            ): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize, handle = handle) as T
+                            }
                         }
-                    }
-                } else {
-                    object : ViewModelProvider.Factory {
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return CommonViewModel<T, E, Q>(repo) as T
+                    } else {
+                        object : ViewModelProvider.Factory {
+                            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize) as T
+                            }
                         }
-                    }
-                })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
+                    })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
         }
 
         fun <T, E : Parcelable, Q : Parcelable> getViewModel(
@@ -184,42 +186,43 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
                 keyMethodName: String? = null,
                 savedState: Boolean = false,
+                pageSize: Int = 10,
                 key: String
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragmentActivity)
-                .getCommonNewRepository(
-                    type, { query, limit ->
+                    .getCommonNewRepository(
+                            type, { query, limit ->
                         initCallback.invoke(query, limit)
                     }, { query, after, limit ->
                         afterCallback.invoke(query, after, limit)
                     },
-                    formatItems,
-                    subredditName,
-                    insertResultIntoDb,
-                    query,
-                    networkPageSize,
-                    afterMethodName,
-                    dataSourceFactory,
-                    keyMethodName
-                )
+                            formatItems,
+                            subredditName,
+                            insertResultIntoDb,
+                            query,
+                            networkPageSize,
+                            afterMethodName,
+                            dataSourceFactory,
+                            keyMethodName
+                    )
             return ViewModelProvider(fragmentActivity,
-                if (savedState) {
-                    object : AbstractSavedStateViewModelFactory(fragmentActivity, null) {
-                        override fun <T : ViewModel?> create(
-                            key: String,
-                            modelClass: Class<T>,
-                            handle: SavedStateHandle
-                        ): T {
-                            return CommonViewModel<T, E, Q>(repo, handle = handle) as T
+                    if (savedState) {
+                        object : AbstractSavedStateViewModelFactory(fragmentActivity, null) {
+                            override fun <T : ViewModel?> create(
+                                    key: String,
+                                    modelClass: Class<T>,
+                                    handle: SavedStateHandle
+                            ): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize, handle = handle) as T
+                            }
                         }
-                    }
-                } else {
-                    object : ViewModelProvider.Factory {
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return CommonViewModel<T, E, Q>(repo) as T
+                    } else {
+                        object : ViewModelProvider.Factory {
+                            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize) as T
+                            }
                         }
-                    }
-                })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
+                    })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
         }
 
         fun <T, F, E : Parcelable, Q : Parcelable> getViewModel(
@@ -237,42 +240,43 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
                 keyMethodName: String? = null,
                 savedState: Boolean = false,
+                pageSize: Int = 10,
                 key: String
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragmentActivity)
-                .getCommonNewRepository(
-                    type, { query, limit ->
+                    .getCommonNewRepository(
+                            type, { query, limit ->
                         initCallback.invoke(f, query, limit)
                     }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
                     },
-                    formatItems,
-                    subredditName,
-                    insertResultIntoDb,
-                    query,
-                    networkPageSize,
-                    afterMethodName,
-                    dataSourceFactory,
-                    keyMethodName
-                )
+                            formatItems,
+                            subredditName,
+                            insertResultIntoDb,
+                            query,
+                            networkPageSize,
+                            afterMethodName,
+                            dataSourceFactory,
+                            keyMethodName
+                    )
             return ViewModelProvider(fragmentActivity,
-                if (savedState) {
-                    object : AbstractSavedStateViewModelFactory(fragmentActivity, null) {
-                        override fun <T : ViewModel?> create(
-                            key: String,
-                            modelClass: Class<T>,
-                            handle: SavedStateHandle
-                        ): T {
-                            return CommonViewModel<T, E, Q>(repo, handle = handle) as T
+                    if (savedState) {
+                        object : AbstractSavedStateViewModelFactory(fragmentActivity, null) {
+                            override fun <T : ViewModel?> create(
+                                    key: String,
+                                    modelClass: Class<T>,
+                                    handle: SavedStateHandle
+                            ): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize, handle = handle) as T
+                            }
                         }
-                    }
-                } else {
-                    object : ViewModelProvider.Factory {
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return CommonViewModel<T, E, Q>(repo) as T
+                    } else {
+                        object : ViewModelProvider.Factory {
+                            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                                return CommonViewModel<T, E, Q>(repo, pageSize) as T
+                            }
                         }
-                    }
-                })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
+                    })[key, CommonViewModel::class.java] as CommonViewModel<T, E, Q>
         }
     }
 }
