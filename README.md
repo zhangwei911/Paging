@@ -1,6 +1,23 @@
 # Paging
 Android Jetpack Paging封装[![Download](https://api.bintray.com/packages/viz/VCommon/paging/images/download.svg)](https://bintray.com/viz/VCommon/paging/_latestVersion)
 
+## gradle集成
+```
+allprojects {
+    repositories {
+        jcenter()
+        //审核中,使用以下地址
+        maven{
+            url "https://dl.bintray.com/viz/VCommon"
+        }
+    }
+}
+
+dependencies {
+    implementation "viz.commonlib:paging:1.0.0"
+}
+```
+
 ## 使用方法
 参照demo中MainFragment类
 

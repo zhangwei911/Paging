@@ -21,7 +21,10 @@
             maven{url getRepositoryDir()}
             google()
             jcenter()
-
+            //审核中,使用以下地址
+            maven{
+                url "https://dl.bintray.com/viz/VCommon"
+            }
         }
         tasks.withType(Javadoc) {
             options{ encoding "UTF-8"
