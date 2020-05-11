@@ -15,6 +15,14 @@ allprojects {
 
 dependencies {
     implementation "viz.commonlib:paging:1.0.0"
+    //项目中包含了okhttp3,gson,retrofit2,如果想使用其他版本,请使用以下方式
+//    implementation("viz.commonlib:paging:1.0.0"){
+//    	exclude group: 'com.squareup.okhttp3',module:'okhttp'
+//    	exclude group: 'com.squareup.okhttp3',module:'logging-interceptor'
+//    	exclude group: 'com.squareup.retrofit2',module:'retrofit'
+//    	exclude group: 'com.squareup.retrofit2',module:'converter-gson'
+//    	exclude group: 'com.google.code.gson',module:'gson'
+//    }
 }
 ```
 
