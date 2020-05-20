@@ -98,6 +98,9 @@ class ItemKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
                     error.url = errorEntity.url
                     error.timestamp = errorEntity.timestamp
                 }
+                retry = {
+                    loadInitial(params, callback)
+                }
                 networkState.postValue(error)
                 initialLoad.postValue(error)
             }
@@ -160,6 +163,9 @@ class ItemKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
                             error.path = errorEntity.path
                             error.url = errorEntity.url
                             error.timestamp = errorEntity.timestamp
+                        }
+                        retry = {
+                            loadAfter(params, callback)
                         }
                         networkState.postValue(error)
                         initialLoad.postValue(error)
