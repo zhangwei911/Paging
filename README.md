@@ -43,6 +43,8 @@ model = CommonViewModel.getViewModel(requireActivity(),
     }, { query, after, limit ->
         //请求下一页
         HttpUtil.createHttp().getData(currentPage, limit)
+    },{ errorEntity ->
+        Log.e("TAG",errorEntity.toString())
     }, { resultBean ->
         //resultBean为请求返回的数据
         currentPage++
@@ -58,12 +60,7 @@ model = CommonViewModel.getViewModel(requireActivity(),
        
 //列表数据绑定设置
 model.posts.observe(viewLifecycleOwner, Observer {
-    if (it == null) {
-        return@Observer
-    }
-    if (it.size > 0) {
-        adapter?.submitList(it)
-    }
+    adapter?.submitList(it)
 })
         
 //网络状态设置
