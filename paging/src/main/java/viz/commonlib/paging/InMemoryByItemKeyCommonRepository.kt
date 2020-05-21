@@ -30,6 +30,7 @@ import java.util.concurrent.Executor
 class InMemoryByItemKeyCommonRepository<T, E : Parcelable, Q : Parcelable>(
         private val initCallback: (query: Q, limit: Int) -> Call<T>,
         private val afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+        private val onError: (errorEntity: ErrorEntity) -> Unit,
         private val formatItems: (t: T) -> DataBean<E>,
         private val keyMethodName: String,
         private val networkExecutor: Executor
@@ -37,45 +38,46 @@ class InMemoryByItemKeyCommonRepository<T, E : Parcelable, Q : Parcelable>(
     @MainThread
     override fun postsOfCommon(query: Q, pageSize: Int): Listing<E> {
         val sourceFactory =
-            CommonItemKeyedDataSourceFactory(
-                initCallback,
-                afterCallback,
-                formatItems,
-                keyMethodName,
-                query,
-                networkExecutor
-            )
+                CommonItemKeyedDataSourceFactory(
+                        initCallback,
+                        afterCallback,
+                        onError,
+                        formatItems,
+                        keyMethodName,
+                        query,
+                        networkExecutor
+                )
 
         val livePagedList = LivePagedListBuilder(
-            sourceFactory,
+                sourceFactory,
 //                PagedList.Config.Builder()
 //                        .setPageSize(pageSize)
 //                        .setEnablePlaceholders(false)
 //                        .setInitialLoadSizeHint(30)
 //                        .setPrefetchDistance(10)
 //                        .build()
-            pageSize
+                pageSize
         )
-            // provide custom executor for network requests, otherwise it will default to
-            // Arch Components' IO pool which is also used for disk access
-            .setFetchExecutor(networkExecutor)
-            .build()
+                // provide custom executor for network requests, otherwise it will default to
+                // Arch Components' IO pool which is also used for disk access
+                .setFetchExecutor(networkExecutor)
+                .build()
 
         val refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
             it.initialLoad
         }
         return Listing(
-            pagedList = livePagedList,
-            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                it.networkState
-            },
-            retry = {
-                sourceFactory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                sourceFactory.sourceLiveData.value?.invalidate()
-            },
-            refreshState = refreshState
+                pagedList = livePagedList,
+                networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                    it.networkState
+                },
+                retry = {
+                    sourceFactory.sourceLiveData.value?.retryAllFailed()
+                },
+                refresh = {
+                    sourceFactory.sourceLiveData.value?.invalidate()
+                },
+                refreshState = refreshState
         )
     }
 }

@@ -30,6 +30,7 @@ import java.util.concurrent.Executor
 class CommonPageKeyedDataSourceFactory<T, E : Parcelable, Q : Parcelable>(
         private val initCallback: (query: Q, limit: Int) -> Call<T>,
         private val afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+        private val onError: (errorEntity: ErrorEntity) -> Unit,
         private val formatItems: (t: T) -> DataBean<E>,
         private val query: Q,
         private val retryExecutor: Executor
@@ -39,6 +40,7 @@ class CommonPageKeyedDataSourceFactory<T, E : Parcelable, Q : Parcelable>(
         val source = PageKeyedCommonDataSource(
                 initCallback,
                 afterCallback,
+                onError,
                 formatItems,
                 query,
                 retryExecutor

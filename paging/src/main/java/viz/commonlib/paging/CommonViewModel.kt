@@ -66,6 +66,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 type: CommonPostRepository.Type,
                 initCallback: (query: Q, limit: Int) -> Call<T>,
                 afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+                onError: (errorEntity: ErrorEntity) -> Unit,
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
@@ -86,6 +87,9 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             },
                             { query, after, limit ->
                                 afterCallback.invoke(query, after, limit)
+                            },
+                            {
+                                onError.invoke(it)
                             },
                             formatItems,
                             subredditName,
@@ -123,6 +127,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 type: CommonPostRepository.Type,
                 initCallback: (f: F, query: Q, limit: Int) -> Call<T>,
                 afterCallback: (f: F, query: Q, after: String, limit: Int) -> Call<T>,
+                onError: (errorEntity: ErrorEntity) -> Unit,
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
@@ -143,6 +148,9 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
                     },
+                            {
+                                onError.invoke(it)
+                            },
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
@@ -177,6 +185,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 type: CommonPostRepository.Type,
                 initCallback: (query: Q, limit: Int) -> Call<T>,
                 afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+                onError: (errorEntity: ErrorEntity) -> Unit,
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
@@ -196,6 +205,9 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                     }, { query, after, limit ->
                         afterCallback.invoke(query, after, limit)
                     },
+                            {
+                                onError.invoke(it)
+                            },
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
@@ -231,6 +243,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 type: CommonPostRepository.Type,
                 initCallback: (f: F, query: Q, limit: Int) -> Call<T>,
                 afterCallback: (f: F, query: Q, after: String, limit: Int) -> Call<T>,
+                onError: (errorEntity: ErrorEntity) -> Unit,
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
@@ -250,6 +263,9 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                     }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
                     },
+                            {
+                                onError.invoke(it)
+                            },
                             formatItems,
                             subredditName,
                             insertResultIntoDb,

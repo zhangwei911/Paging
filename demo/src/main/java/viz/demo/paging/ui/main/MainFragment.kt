@@ -60,7 +60,11 @@ class MainFragment : Fragment() {
             HttpUtil.createHttp().getData(currentPage, limit)
         }, { query, after, limit ->
             HttpUtil.createHttp().getData(currentPage, limit)
+        }, { errorEntity ->
+            //在这里处理401等错误
+            Log.e("MainFragment", errorEntity.toString())
         }, { resultBean ->
+            //这里会接受最新的数据,并进行组装成你想要的数据
             currentPage++
             val listInner = resultBean.data
             DataBean(items = listInner)
@@ -68,15 +72,12 @@ class MainFragment : Fragment() {
         )
 
         model.posts.observe(viewLifecycleOwner, Observer {
-            if (it == null) {
-                return@Observer
-            }
-            if (it.size > 0) {
-                adapter?.submitList(it)
-            }
+            //这里不应做判断,由于之前的场景只是查看,不涉及删除等操作,忽略了这个问题,不过由于android jetpack paging的原因,删除需要调用model?.refresh(),也许有更好的方法我没有发现
+            adapter?.submitList(it)
         })
         model.networkState.observe(viewLifecycleOwner, Observer {
             adapter?.setNetworkState(it)
+            //不要在这里处理401等错误,因为状态会被保存,跳转到登陆界面再返回时会调用
         })
         initSwipeToRefresh()
 

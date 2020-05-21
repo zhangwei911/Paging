@@ -58,6 +58,7 @@ interface ServiceLocator {
             type: CommonPostRepository.Type,
             initCallback: (query: Q, limit: Int) -> Call<T>,
             afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+            onError: (errorEntity: ErrorEntity) -> Unit,
             formatItems: (t: T) -> DataBean<E>,
             subredditName: String? = null,
             insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
@@ -90,6 +91,7 @@ open class DefaultServiceLocator(val app: Application, val useInMemoryDb: Boolea
             type: CommonPostRepository.Type,
             initCallback: (query: Q, limit: Int) -> Call<T>,
             afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+            onError: (errorEntity: ErrorEntity) -> Unit,
             formatItems: (t: T) -> DataBean<E>,
             subredditName: String?,
             insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)?,
@@ -103,12 +105,14 @@ open class DefaultServiceLocator(val app: Application, val useInMemoryDb: Boolea
             CommonPostRepository.Type.IN_MEMORY_BY_PAGE -> InMemoryByPageKeyCommonRepository(
                     initCallback,
                     afterCallback,
+                    onError,
                     formatItems,
                     getNetworkExecutor()
             )
             CommonPostRepository.Type.IN_MEMORY_BY_ITEM -> InMemoryByItemKeyCommonRepository(
                     initCallback,
                     afterCallback,
+                    onError,
                     formatItems,
                     keyMethodName!!,
                     getNetworkExecutor()

@@ -30,6 +30,7 @@ import java.util.concurrent.Executor
 class CommonItemKeyedDataSourceFactory<T, E : Parcelable, Q : Parcelable>(
         private val initCallback: (query: Q, limit: Int) -> Call<T>,
         private val afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+        private val onError: (errorEntity: ErrorEntity) -> Unit,
         private val formatItems: (t: T) -> DataBean<E>,
         private val keyMethodName:String,
         private val query: Q,
@@ -38,12 +39,13 @@ class CommonItemKeyedDataSourceFactory<T, E : Parcelable, Q : Parcelable>(
     val sourceLiveData = MutableLiveData<ItemKeyedCommonDataSource<T, E, Q>>()
     override fun create(): DataSource<String, E> {
         val source = ItemKeyedCommonDataSource(
-            initCallback,
-            afterCallback,
-            formatItems,
-            keyMethodName,
-            query,
-            retryExecutor
+                initCallback,
+                afterCallback,
+                onError,
+                formatItems,
+                keyMethodName,
+                query,
+                retryExecutor
         )
         sourceLiveData.postValue(source)
         return source

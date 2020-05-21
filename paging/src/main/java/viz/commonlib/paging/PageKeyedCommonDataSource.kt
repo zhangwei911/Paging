@@ -34,6 +34,7 @@ import java.util.concurrent.Executor
 class PageKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
         private val initCallback: (query: Q, limit: Int) -> Call<T>,
         private val afterCallback: (query: Q, after: String, limit: Int) -> Call<T>,
+        private val onError: (errorEntity: ErrorEntity) -> Unit,
         private val formatItems: (t: T) -> DataBean<E>,
         private val query: Q,
         private val retryExecutor: Executor
@@ -108,6 +109,7 @@ class PageKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
                                 errorEntity.path = response.raw().request.url.encodedPath
                                 errorEntity.url = response.raw().request.url.toString()
                             }
+                            onError.invoke(errorEntity)
                             error.code = errorEntity.status
                             error.error = errorEntity.error
                             error.message = errorEntity.message
@@ -115,10 +117,14 @@ class PageKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
                             error.url = errorEntity.url
                             error.timestamp = errorEntity.timestamp
                         }
+                        retry = {
+                            loadAfter(params, callback)
+                        }
                         networkState.postValue(error)
                         initialLoad.postValue(error)
                     }
                 }, onError = { errorEntity, call, t, response ->
+                    onError.invoke(errorEntity)
                     retry = {
                         loadAfter(params, callback)
                     }
@@ -174,12 +180,16 @@ class PageKeyedCommonDataSource<T, E : Parcelable, Q : Parcelable>(
                         errorEntity.path = response.raw().request.url.encodedPath
                         errorEntity.url = response.raw().request.url.toString()
                     }
+                    onError.invoke(errorEntity)
                     error.code = errorEntity.status
                     error.error = errorEntity.error
                     error.message = errorEntity.message
                     error.path = errorEntity.path
                     error.url = errorEntity.url
                     error.timestamp = errorEntity.timestamp
+                }
+                retry = {
+                    loadInitial(params, callback)
                 }
                 networkState.postValue(error)
                 initialLoad.postValue(error)
