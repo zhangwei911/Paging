@@ -33,12 +33,13 @@ class CommonPostsAdapter<T>
     private lateinit var createViewHolderWithListener2: (parent: ViewGroup, layoutId: Int, listener: OnRecycleViewerItemChildViewClickListener<T>) -> RecyclerView.ViewHolder
     private var glide: GlideRequests? = null
     private var retryCallback: () -> Unit
+    var showNetworkStateItem = true
 
     constructor(
-        layoutId: Int,
-        createViewHolder: (parent: ViewGroup, glide: GlideRequests, layoutId: Int) -> RecyclerView.ViewHolder,
-        glide: GlideRequests,
-        retryCallback: () -> Unit
+            layoutId: Int,
+            createViewHolder: (parent: ViewGroup, glide: GlideRequests, layoutId: Int) -> RecyclerView.ViewHolder,
+            glide: GlideRequests,
+            retryCallback: () -> Unit
     ) : super(DiffCallBack<T>()) {
         this.layoutId = layoutId
         this.createViewHolder = createViewHolder
@@ -47,9 +48,9 @@ class CommonPostsAdapter<T>
     }
 
     constructor(
-        layoutId: Int,
-        createViewHolder: (parent: ViewGroup, layoutId: Int) -> RecyclerView.ViewHolder,
-        retryCallback: () -> Unit
+            layoutId: Int,
+            createViewHolder: (parent: ViewGroup, layoutId: Int) -> RecyclerView.ViewHolder,
+            retryCallback: () -> Unit
     ) : super(DiffCallBack<T>()) {
         this.layoutId = layoutId
         this.createViewHolder2 = createViewHolder
@@ -85,16 +86,16 @@ class CommonPostsAdapter<T>
         when (getItemViewType(position)) {
             layoutId -> (holder as CommonViewHolder<T>).bindTo(getItem(position), position)
             R.layout.network_state_item -> (holder as NetworkStateItemViewHolder).bindTo(
-                networkState
+                    networkState
             )
         }
     }
 
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
+            holder: RecyclerView.ViewHolder,
+            position: Int,
+            payloads: MutableList<Any>
     ) {
         if (payloads.isNotEmpty()) {
             val item = getItem(position)
@@ -124,7 +125,7 @@ class CommonPostsAdapter<T>
         }
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+    private fun hasExtraRow() = showNetworkStateItem && networkState != null && networkState != NetworkState.LOADED
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {

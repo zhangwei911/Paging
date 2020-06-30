@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
  * It is used to show the network state of paging.
  */
 class NetworkStateItemViewHolder(
-    view: View,
-    private val retryCallback: () -> Unit
+        view: View,
+        private val retryCallback: () -> Unit
 ) : RecyclerView.ViewHolder(view) {
     private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
     private val retry = view.findViewById<Button>(R.id.retry_button)
@@ -47,7 +47,11 @@ class NetworkStateItemViewHolder(
     fun bindTo(networkState: NetworkState?) {
 //        progressBar.visibility = toVisbility(networkState?.status == RUNNING)
         retry.visibility = toVisbility(networkState?.status == Status.FAILED)
-        if (networkState?.msg != null) {
+        if (retry.visibility == View.VISIBLE && networkState?.msg != null) {
+            if (networkState.msg.length > 100) {
+                errorMsg.text = "${networkState.code}:服务器异常"
+                return
+            }
             errorMsg.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(networkState.msg, Html.FROM_HTML_MODE_LEGACY)
             } else {
@@ -59,7 +63,7 @@ class NetworkStateItemViewHolder(
     companion object {
         fun create(parent: ViewGroup, retryCallback: () -> Unit): NetworkStateItemViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.network_state_item, parent, false)
+                    .inflate(R.layout.network_state_item, parent, false)
             return NetworkStateItemViewHolder(view, retryCallback)
         }
 
