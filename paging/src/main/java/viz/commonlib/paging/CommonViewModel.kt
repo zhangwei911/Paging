@@ -70,7 +70,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
-                query: Q? = null,
                 networkPageSize: Int = 0,
                 afterMethodName: String? = null,
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
@@ -82,7 +81,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
             val repo = ServiceLocator.instance(fragment.requireContext())
                     .getCommonNewRepository(
                             type,
-                            { query, limit ->
+                            { query: Q, limit ->
                                 initCallback.invoke(query, limit)
                             },
                             { query, after, limit ->
@@ -94,7 +93,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
-                            query,
                             networkPageSize,
                             afterMethodName,
                             dataSourceFactory,
@@ -131,7 +129,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
-                query: Q? = null,
                 networkPageSize: Int = 0,
                 afterMethodName: String? = null,
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
@@ -143,7 +140,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
             val repo = ServiceLocator.instance(fragment.requireContext())
                     .getCommonNewRepository(
                             type,
-                            { query, limit ->
+                            { query: Q, limit ->
                                 initCallback.invoke(f, query, limit)
                             }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
@@ -154,7 +151,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
-                            query,
                             networkPageSize,
                             afterMethodName,
                             dataSourceFactory,
@@ -189,7 +185,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
-                query: Q? = null,
                 networkPageSize: Int = 0,
                 afterMethodName: String? = null,
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
@@ -200,7 +195,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragmentActivity)
                     .getCommonNewRepository(
-                            type, { query, limit ->
+                            type, { query: Q, limit ->
                         initCallback.invoke(query, limit)
                     }, { query, after, limit ->
                         afterCallback.invoke(query, after, limit)
@@ -211,7 +206,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
-                            query,
                             networkPageSize,
                             afterMethodName,
                             dataSourceFactory,
@@ -247,7 +241,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                 formatItems: (t: T) -> DataBean<E>,
                 subredditName: String? = null,
                 insertResultIntoDb: ((subredditName: String, items: MutableList<E>) -> Unit)? = null,
-                query: Q? = null,
                 networkPageSize: Int = 0,
                 afterMethodName: String? = null,
                 dataSourceFactory: DataSource.Factory<Int, E>? = null,
@@ -258,7 +251,7 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
         ): CommonViewModel<T, E, Q> {
             val repo = ServiceLocator.instance(fragmentActivity)
                     .getCommonNewRepository(
-                            type, { query, limit ->
+                            type, { query: Q, limit ->
                         initCallback.invoke(f, query, limit)
                     }, { query, after, limit ->
                         afterCallback.invoke(f, query, after, limit)
@@ -269,7 +262,6 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
                             formatItems,
                             subredditName,
                             insertResultIntoDb,
-                            query,
                             networkPageSize,
                             afterMethodName,
                             dataSourceFactory,
