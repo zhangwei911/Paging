@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation project(":paging")
+    implementation project(":paging3")
 //    implementation "viz.commonlib:paging:1.0.0"
 
     //项目中包含了okhttp3,gson,retrofit2,如果想使用其他版本,请使用以下方式

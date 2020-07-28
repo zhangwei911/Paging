@@ -26,6 +26,13 @@ interface HttpUtil {
             @Field("pageSize") pageSize: Int
     ): Call<ResultBean>
 
+    @POST("test")
+    @FormUrlEncoded
+    suspend fun getData2(
+            @Field("page") page: Int,
+            @Field("pageSize") pageSize: Int
+    ): ResultBean
+
     companion object {
         fun createHttp(
                 url: String = "http://www.baidu.com",
