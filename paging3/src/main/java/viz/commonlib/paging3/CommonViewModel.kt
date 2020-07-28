@@ -41,33 +41,18 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
         private val savedStateHandle: SavedStateHandle? = null
 ) : ViewModel() {
     private val query = MutableLiveData<Q>()
-    private val DEFAULT_SUBREDDIT:Q?=null
+    private val DEFAULT_SUBREDDIT: Q? = null
 
     private val clearListCh = Channel<Unit>(Channel.CONFLATED)
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val posts = flowOf(
             clearListCh.consumeAsFlow().map { PagingData.empty<E>() },
-            savedStateHandle!!.getLiveData<Q>(KEY_SUBREDDIT)
-                    .asFlow()
-                    .flatMapLatest { repository.postsOfCommon(it, 30) }
-    )
-//            .apply {
-//        flow {
-//            if (savedStateHandle != null) {
-//                emit(
-//                        savedStateHandle.getLiveData<Q>(KEY_SUBREDDIT)
-//                                .asFlow()
-//                                .flatMapLatest { repository.postsOfCommon(it, 30) }
-//                )
-//            } else {
-//                if (query.value != null) {
-//                    emit(repository.postsOfCommon(query.value!!, 30))
-//                }
-//            }
-//        }
-//    }
-            .flattenMerge(2)
+            savedStateHandle?.getLiveData<Q>(KEY_SUBREDDIT)?.asFlow()?.flatMapLatest { repository.postsOfCommon(it, 30) }
+                    ?: query.asFlow().flatMapLatest {
+                        repository.postsOfCommon(it, 30)
+                    }
+    ).flattenMerge(2)
 
     fun shouldShowSubreddit(
             query: Q

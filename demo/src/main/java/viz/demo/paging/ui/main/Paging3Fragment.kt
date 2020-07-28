@@ -76,7 +76,7 @@ class Paging3Fragment : Fragment() {
                     } else {
                         currentPage.toString()
                     })
-                }, keyMethodName = "getName", key = "Paging3Fragment", savedState = true
+                }, keyMethodName = "getName", key = "Paging3Fragment", savedState = false
         )
         adapter = CommonPagingDataAdapter(
                 R.layout.item,
