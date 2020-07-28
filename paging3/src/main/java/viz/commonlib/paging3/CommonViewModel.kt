@@ -48,9 +48,9 @@ class CommonViewModel<T, E : Parcelable, Q : Parcelable>(
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val posts = flowOf(
             clearListCh.consumeAsFlow().map { PagingData.empty<E>() },
-            savedStateHandle?.getLiveData<Q>(KEY_SUBREDDIT)?.asFlow()?.flatMapLatest { repository.postsOfCommon(it, 30) }
+            savedStateHandle?.getLiveData<Q>(KEY_SUBREDDIT)?.asFlow()?.flatMapLatest { repository.postsOfCommon(it, pageSize) }
                     ?: query.asFlow().flatMapLatest {
-                        repository.postsOfCommon(it, 30)
+                        repository.postsOfCommon(it, pageSize)
                     }
     ).flattenMerge(2)
 
